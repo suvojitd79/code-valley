@@ -107,13 +107,113 @@ word break problem
 
 
 
-
 /**
- *  Maximum sum rectangle in a 2D matrix 
- * 
+ *          
+ *  max contiguous sum in 1D array using kadane's algorithm
  * 
  */
 
+private class SumObject{
+    int sum, start, end;
+
+    SumObject(int sum,int start,int end){
+
+        this.sum = sum;
+        this.start = start;
+        this.end = end;
+    }    
+}
+
+public SumObject getMax1D(int[] nums){
+
+    int max_so_far = nums[0];
+    int max_global = nums[0];
+    int start = 0,end = 0;
+        
+    for(int i=1;i<nums.length;i++){
+
+        if(nums[i] > max_so_far && nums[i] + max_so_far < nums[i]){
+            
+            max_so_far = nums[i];
+            start = i;
+        }else
+             max_so_far += nums[i];
+        
+        if(max_so_far > max_global){
+            
+            max_global = max_so_far;
+            end = i;
+        }
+        
+        
+    }
+    return new SumObject(max_global,start,end);
+}
+
+
+
+/**
+ *  Maximum sum rectangle in a 2D matrix 
+ *  time complexity O(col^2 * row) 
+ *  space complexity O(row)
+ * 
+ */
+
+
+ private class Kadane2D{
+    int max_sum,left,right,top,bottom;
+    Kadane2D(int max_sum,int left,int right,int top,int bottom){
+        this.max_sum = max_sum;
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+    }
+ }
+
+public Kadane2D getMax2D(int[][] matrix){
+ 
+    int[] cache = new int[matrix.length]; //store the intermediate data 
+    int col = matrix[0].length;
+    Kadane2D kadane2d = new Kadane2D( Integer.MIN_VALUE , -1, -1, -1, -1);
+
+    for(int left = 0; left<col; left++){
+
+        for(int i=0;i<cache.length;i++) cache[i] = 0; // reset    
+
+
+        for(int right = left;right<col;right++){
+
+             for(int i=0;i<matrix.length;i++) cache[i] += matrix[i][right];
+
+             SumObject sumObject = getMax1D(cache);
+
+             if(sumObject.sum > kadane2d.max_sum){
+
+                kadane2d.max_sum = sumObject.sum;
+                kadane2d.left = left;
+                kadane2d.right = right;
+                kadane2d.top = sumObject.start;
+                kadane2d.bottom = sumObject.end;
+
+             }   
+
+
+        }
+
+
+    }
+
+    return kadane2d;
+
+}    
+
+
+
+
+public static void main(String[] args){
+    //test your code here
+}
 
 
 }
