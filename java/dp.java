@@ -99,10 +99,39 @@ word break problem
 /**
  * 
  *  Arithmetic Subsequences	
-
+  Given an array A of integers, return the length of the longest arithmetic subsequence in A.
  * 
  */
 
+public int longestArithSeqLength(int[] A) {
+     
+    ArrayList<HashMap<Integer,Integer>> cache = new ArrayList<>();
+    for(int i=0;i<A.length;i++) cache.add(i, new HashMap<Integer,Integer>());
+    
+    for(int i=1;i<A.length;i++){
+        for(int j=0;j<i;j++){
+            
+            HashMap<Integer, Integer> prev = cache.get(j);
+            HashMap<Integer, Integer> curr = cache.get(i);
+                
+            int val = A[i]-A[j];
+            
+            if(prev.containsKey(val)) curr.put(val, prev.get(val) + 1);
+            else curr.put(val, 1);    
+        }
+        
+    }
+    
+    int ans = 1;
+    
+    for(int i=0;i<cache.size();i++){
+        for(Integer x:cache.get(i).values())
+                ans = Math.max(ans, x+1);
+    }
+    
+    return ans;
+    
+}
 
 
 
