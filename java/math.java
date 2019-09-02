@@ -423,7 +423,48 @@ public class math{
         }
 
 
+    /*
+            
+        Count of paths in a grid
+        Given an integer A, find and return the number of paths in a grid of size (A x A) that starts from (1, 1) and reaches (A, A) without crossing the major diagonal. Since the result can be large, return the result modulo (10^9 + 7). 
+        Input Format
+        The only argument given is integer A.
+        Output Format
+        Return the number of paths modulo (10^9 + 7).
+        Constraints
+        1 <= A <= 10^6
+        For Example
+        Input 1:
+            A = 2
+        Output 1:
+            1
 
+        Input 2:
+            A = 5
+        Output 2:
+            14
+    */
+
+    public int solveCatalan(int A) {
+        
+        long[] cache = new long[A];
+        cache[0] = 1;
+        cache[1] = 1;
+        int mod = 1000000007;
+        
+        for(int i = 2;i<A;i++){
+            cache[i] = 0;
+            for(int j=0;j<i;j++){
+                
+                cache[i] += cache[j] * cache[i-j-1];
+                cache[i] = cache[i] % mod; 
+            }
+            
+        }    
+        
+        return (int) ((cache[A-1] + mod) % mod);
+        
+    }
 
 
 
