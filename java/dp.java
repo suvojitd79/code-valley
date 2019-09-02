@@ -126,7 +126,10 @@ public int longestArithSeqLength(int[] A) {
     
     for(int i=0;i<cache.size();i++){
         for(Integer x:cache.get(i).values())
-                ans = Math.max(ans, x+1);
+                { 
+                    System.out.print(x + "  ");
+                    ans = Math.max(ans, x+1);
+                }
     }
     
     return ans;
@@ -237,11 +240,35 @@ public Kadane2D getMax2D(int[][] matrix){
 
 }    
 
+/**
+ *  A sequence of numbers is called arithmetic if it consists of at least three elements and if the           difference between any two consecutive elements is the same.
+ *  The function should return the number of arithmetic subsequences slices in the array A
+ *  
+ * Input 1:
+     A = [2, 4, 6, 8, 10]
+
+    Output 1: 
+       7
+
+Explanation 1:
+     All arithmetic subsequence slices are:
+        [2,4,6]
+        [4,6,8]
+        [6,8,10]
+        [2,4,6,8]
+        [4,6,8,10]
+        [2,4,6,8,10]
+        [2,6,10]
+ * 
+ */
+
+
 
 
 
 public static void main(String[] args){
     //test your code here
+    new dp().longestArithSeqLength(new int[]{ -2, -4, -10, 10, 7, 3, 6, -3, -4, -6});
 }
 
 
