@@ -234,7 +234,199 @@ public class math{
         return (int) (count % 1000000007L);
     }
     
+
+    /**
+     Kingdom War
+        Two kingdoms are on a war right now, kingdom X and kingdom Y. As a war specialist of kingdom X, you scouted kingdom Y area. A kingdom area is defined as a N x M grid with each cell denoting a village. Each cell has a value which denotes the strength of each corresponding village. The strength can also be negative, representing those warriors of your kingdom who were held hostages. There's also another thing to be noticed.
+        The strength of any village on row larger than one (2<=r<=N) is stronger or equal to the strength of village which is exactly above it.
+        The strength of any village on column larger than one (2<=c<=M) is stronger or equal to the strength of vilage which is exactly to its left. (stronger means having higher value as defined above).
+        So your task is, find the largest sum of strength that you can erase by bombing one sub-matrix in the grid. Input format:
+        First line consists of 2 integers N and M denoting the number of rows and columns in the grid respectively.
+        The next N lines, consists of M integers each denoting the strength of each cell.
+
+        1 <= N <= 1500
+        1 <= M <= 1500
+        -200 <= Cell Strength <= 200
+        Output:
+        The largest sum of strength that you can get by choosing one sub-matrix.
+        Example:
+        Input:
+        3 3
+        -5 -4 -1
+        -3 2 4
+        2 5 8
+
+        Output:
+        19
+
+        Explanation:
+        Bomb the sub-matrix from (2,2) to (3,3): 2 + 4 + 5 + 8 = 19
+
+     */
     
+
+    public int solveKingdomWar(ArrayList<ArrayList<Integer>> A) {
+        
+        int r = A.size();
+        int c = A.get(0).size();
+        
+        
+        int[][] cache = new int[r][c]; 
+        
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                
+                cache[i][j] = A.get(i).get(j);
+                   
+            }
+        }
+        
+        
+        // suffix sum column wise
+        for(int i=2;i<=c;i++){
+            for(int j=0;j<r;j++){
+                    cache[j][c-i] = cache[j][c-i+1] + cache[j][c-i];
+            }
+        }
+    
+        //suffix sum row wise
+        
+        // suffix sum column wise
+        for(int i=2;i<=r;i++){
+            for(int j=0;j<c;j++){
+                    cache[r-i][j] = cache[r-i+1][j] + cache[r-i][j];
+            }
+        }
+        
+        int ans = Integer.MIN_VALUE;
+        
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                
+                ans = Math.max(ans, cache[i][j]);
+                   
+            }
+        }
+        
+    
+        return ans;
+    }
+    
+
+    /*
+
+    Sub-matrix Sum Queries : 
+    
+    Given a matrix of integers A of size N x M and multiple queries Q, for each query find and return the submatrix sum. Inputs to queries are top left (b, c) and bottom right (d, e) indexes of submatrix whose sum is to find out. Note: Rows are numbered from top to bottom and columns are numbered from left to right. Sum may be large so return the answer mod 10^9 + 7. 
+
+    */
+
+
+    public ArrayList<Integer> solve(ArrayList<ArrayList<Integer>> A, ArrayList<Integer> B, ArrayList<Integer> C, ArrayList<Integer> D, ArrayList<Integer> E) {
+    
+        int r = A.size();
+        int c = A.get(0).size();
+        int q = B.size();
+        int mod = 1000000007;
+    
+        long[][] cache = new long[r][c];
+        
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                    
+                    cache[i][j] = A.get(i).get(j);
+                    
+            }
+        }
+        
+        // prefix sum column wise
+        
+        for(int i=1;i<c;i++){
+            for(int j=0;j<r;j++){
+                
+                cache[j][i] = (cache[j][i] + cache[j][i-1]) % mod; 
+                
+            }
+        }
+        
+        // prefix sum row wise
+        
+        for(int i=1;i<r;i++){
+            for(int j=0;j<c;j++){
+                
+                cache[i][j] = (cache[i][j] + cache[i-1][j]) % mod; 
+                
+            }
+        }
+        
+        ArrayList<Integer> a = new ArrayList<>();
+        
+        
+        for(int i=0;i<q;i++){
+            
+            int x1 = B.get(i)-1, y1 = C.get(i)-1;
+            int x2 = D.get(i)-1, y2 = E.get(i)-1;
+            
+            long ans = cache[x2][y2];
+            
+            if(x1-1 >= 0) 
+                ans = ( ans - cache[x1-1][y2]) % mod;
+            if(y1-1 >= 0)
+                ans = ( ans - cache[x2][y1-1]) % mod;
+            if(x1-1 >= 0 && y1-1 >= 0)
+                ans = (ans + cache[x1-1][y1-1]) % mod;
+            
+            ans = ( ans + mod ) % mod;
+            
+            a.add((int) ans);
+            
+        }
+        
+        return a;
+        
+    }
+
+
+
+
+
+    /*
+
+    Number Of Digit One : 
+
+    Given an integer n, count the total number of digit 1 appearing in all non-negative integers less than or equal to n.
+
+    Example:
+
+    Input: 13
+    Output: 6 
+    Explanation: Digit 1 occurred in the following numbers: 1, 10, 11, 12, 13.
+
+    */
+
+
+    public int solveDigit1(int A) {
+        
+        
+        int ans = 0;
+        
+        for(long i=1;i<=A;i*=10){
+            
+            long d = 10 * i;
+            
+            ans += ((A/d) * i) + Math.min(Math.max(A % d - i + 1, 0), (int) i);
+            
+        }
+        
+        return ans;
+        
+        }
+
+
+
+
+
+
 
     public static void main(String[] args){
 
