@@ -15,7 +15,6 @@ public class list{
         Merge two sorted linked lists
     */
 
-
     public ListNode mergeTwoLists(ListNode A, ListNode B) {
         
         if(A==null) return B;
@@ -114,14 +113,124 @@ public class list{
 
 
     /*
+        Flatten a Linked List
 
 
+        Input 1:
+       3 -> 4 -> 20 -> 20 ->30
+       |    |    |     |    |
+       7    11   22    20   31
+       |               |    |
+       7               28   39
+       |               |
+       8               39
 
-
+Output 1:
+3 -> 4 -> 7 -> 7 -> 8 -> 11 -> 20 -> 20 -> 20 -> 22 -> 28 -> 30 -> 31 -> 39 -> 39 
 
     */
 
 
+    /*
+    class ListNode {
+        int val;
+        ListNode right, down;
+        ListNode(int x) {
+            val = x;
+            right = down = null;
+        }
+    }
+    */
+
+
+
+    ListNode flatten(ListNode root) {
+        
+        if(root == null || root.right ==null) return root;    
+        
+        root.right = flatten(root.right);
+        
+        root = mergeTwoLists(root, root.right);
+        
+        return root;
+        
+    }
+
+    public ListNode mergeTwoLists(ListNode A, ListNode B) {
+            
+            if(A==null) return B;
+            
+            if(B==null) return A;
+            
+            ListNode root = new ListNode(0);
+            ListNode r = root;
+            
+            while(A!=null && B!=null){
+                
+                if(A.val < B.val){
+                    
+                    root.down = A;
+                    root = A;
+                    A = A.down;
+                }else{
+                    
+                    root.down = B;
+                    root = B;
+                    B = B.down;
+                }
+                
+            }
+            
+            if(A != null) root.down = A;
+            if(B != null) root.down = B;
+        
+            return r.down;
+            
+        }
+
+
+
+
+    /*
+
+    clone a linked list with next and random pointer
+    
+    */
+
+        /**
+     * Definition for singly-linked list with a random pointer.
+     * class RandomListNode {
+     *     int label;
+     *     RandomListNode next, random;
+     *     RandomListNode(int x) { this.label = x; }
+     * };
+     */
+
+    public RandomListNode copyRandomList(RandomListNode head) {
+        
+        HashMap<RandomListNode,RandomListNode> map = new HashMap<>();
+        
+        RandomListNode temp = head;
+        
+        while(temp != null){
+            
+                RandomListNode copy = new RandomListNode(temp.label);
+                map.put(temp, copy);
+                temp = temp.next;
+        }
+        
+        temp = head;
+        
+        while(temp != null){
+            
+                RandomListNode copy = map.get(temp);
+                copy.next = map.get(temp.next);
+                copy.random = map.get(temp.random);
+                temp = temp.next;
+        }
+        
+        return map.get(head);
+    }
 
 
 
@@ -129,5 +238,6 @@ public class list{
 
         
     }
+
 
 }
